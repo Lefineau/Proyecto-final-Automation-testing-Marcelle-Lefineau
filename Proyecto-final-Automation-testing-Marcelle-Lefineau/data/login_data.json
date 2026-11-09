@@ -1,0 +1,20 @@
+[
+    {
+        "description": "Inicio de sesión exitoso con usuario estándar",
+        "username": "standard_user",
+        "password": "secret_sauce",
+        "expected": "success"
+    },
+    {
+        "description": "Intento de ingreso con usuario bloqueado",
+        "username": "locked_out_user",
+        "password": "secret_sauce",
+        "expected": "locked"
+    },
+    {
+        "description": "Intento de ingreso con contraseña incorrecta",
+        "username": "standard_user",
+        "password": "wrong_password",
+        "expected": "error"
+    }
+]
