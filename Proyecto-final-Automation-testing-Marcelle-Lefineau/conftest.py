@@ -13,7 +13,6 @@ def pytest_runtest_makereport(item, call):
 
     if report.when == "call" and report.failed:
 
-        # Recuperar el navegador asociado a esta prueba.
         driver = getattr(item, "_screenshot_driver", None)
 
         if driver is None:
@@ -26,7 +25,6 @@ def pytest_runtest_makereport(item, call):
             print("\nNo se encontró un navegador para capturar.")
             return
 
-        # Crear carpeta screenshots en la raíz del proyecto.
         screenshot_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             "screenshots"
@@ -34,9 +32,7 @@ def pytest_runtest_makereport(item, call):
 
         os.makedirs(screenshot_dir, exist_ok=True)
 
-        timestamp = datetime.now().strftime(
-            "%Y-%m-%d_%H-%M-%S"
-        )
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 
         test_name = re.sub(
             r"[^a-zA-Z0-9_-]",
@@ -50,8 +46,18 @@ def pytest_runtest_makereport(item, call):
         try:
             saved = driver.save_screenshot(filepath)
 
-            print(f"\nCaptura guardada: {filepath}")
-            print(f"Resultado de Selenium: {saved}")
+            if saved:
+                print(f"\nCaptura guardada: {filepath}")
+
+                if hasattr(report, "extras"):
+                    from pytest_html import extras
+
+                    report.extras.append(
+                        extras.image(
+                            filepath,
+                            name="Captura de pantalla"
+                        )
+                    )
 
         except Exception as error:
             print(f"\nError al guardar screenshot: {error}")
