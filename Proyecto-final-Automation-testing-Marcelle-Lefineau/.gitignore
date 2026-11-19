@@ -1,7 +1,11 @@
+.venv/
 venv/
 __pycache__/
+*.py[cod]
 .pytest_cache/
-*.pyc
 logs/
-screenshots/
-reports/
+screenshots/*
+!screenshots/.gitkeep
+reports/*
+!reports/.gitkeep
+*.log

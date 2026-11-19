@@ -1,12 +1,15 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from utils.logger import get_logger
+
 
 class BasePage:
 
     def __init__(self, driver):
         self.driver = driver
         self.wait = WebDriverWait(driver, 10)
+        self.logger = get_logger(self.__class__.__name__)
 
     # Buscar un elemento y esperar hasta que sea visible.
     def find_element(self, locator):
@@ -20,12 +23,14 @@ class BasePage:
             EC.element_to_be_clickable(locator)
         )
         element.click()
+        self.logger.info("Clic realizado sobre el localizador %s", locator)
 
     # Escribir texto en un campo.
     def enter_text(self, locator, text):
         element = self.find_element(locator)
         element.clear()
         element.send_keys(text)
+        self.logger.info("Texto ingresado en el localizador %s", locator)
 
     # Obtener el texto de un elemento.
     def get_text(self, locator):

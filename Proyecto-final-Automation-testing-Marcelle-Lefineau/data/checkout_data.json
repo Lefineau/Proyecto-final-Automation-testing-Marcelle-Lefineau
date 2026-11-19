@@ -1,0 +1,8 @@
+{
+  "customer": {
+    "first_name": "Marcelle",
+    "last_name": "Lefineau",
+    "postal_code": "1000"
+  },
+  "expected_confirmation": "Thank you for your order!"
+}

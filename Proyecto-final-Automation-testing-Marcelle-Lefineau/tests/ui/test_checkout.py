@@ -1,10 +1,17 @@
 
+import json
+from pathlib import Path
+
 import pytest
 
 from pages.login_page import LoginPage
 from pages.inventory_page import InventoryPage
 from pages.cart_page import CartPage
 from pages.checkout_page import CheckoutPage
+
+DATA_FILE = Path(__file__).resolve().parents[2] / "data" / "checkout_data.json"
+with DATA_FILE.open(encoding="utf-8") as file:
+    checkout_data = json.load(file)
 
 
 @pytest.fixture
@@ -31,10 +38,11 @@ def checkout_page(driver):
 def test_compra_exitosa(checkout_page):
 
     # Completar información del cliente.
+    customer = checkout_data["customer"]
     checkout_page.fill_customer_information(
-        "Marcelle",
-        "Lefineau",
-        "1000"
+        customer["first_name"],
+        customer["last_name"],
+        customer["postal_code"],
     )
 
     # Continuar al resumen.
@@ -51,7 +59,7 @@ def test_compra_exitosa(checkout_page):
     # Validar confirmación.
     confirmation = checkout_page.get_confirmation_message()
 
-    assert confirmation == "Thank you for your order!", (
+    assert confirmation == checkout_data["expected_confirmation"], (
         "ERROR: No se confirmó la compra correctamente"
     )
 

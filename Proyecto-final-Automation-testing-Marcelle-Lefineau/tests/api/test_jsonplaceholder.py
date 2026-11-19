@@ -78,3 +78,11 @@ def test_eliminar_post():
     assert response.status_code == 200
 
     print("DELETE ejecutado correctamente")
+
+@pytest.mark.api
+def test_obtener_post_inexistente():
+    """Escenario negativo: consultar un recurso que no existe."""
+    response = requests.get(f"{BASE_URL}/posts/9999", timeout=15)
+
+    assert response.status_code == 404
+    assert response.text == "{}"

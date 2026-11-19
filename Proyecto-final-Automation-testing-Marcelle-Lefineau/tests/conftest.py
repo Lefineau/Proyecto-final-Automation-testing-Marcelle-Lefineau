@@ -1,26 +1,29 @@
+"""Fixtures compartidas por las pruebas."""
 import pytest
 from selenium import webdriver
 
 from utils.config import BROWSER
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
 
 
 @pytest.fixture
-def driver():
+def driver(request):
+    """Inicia y cierra una instancia nueva del navegador por prueba."""
+    browser_name = BROWSER.lower()
+    logger.info("Iniciando navegador: %s | prueba: %s", browser_name, request.node.nodeid)
 
-    # Iniciar el navegador configurado.
-    if BROWSER.lower() == "firefox":
+    if browser_name == "firefox":
         browser = webdriver.Firefox()
-
-    elif BROWSER.lower() == "chrome":
+    elif browser_name == "chrome":
         browser = webdriver.Chrome()
-
     else:
-        raise ValueError("Navegador no soportado")
+        raise ValueError(f"Navegador no soportado: {BROWSER}")
 
-    # Maximizar la ventana.
+    request.node._screenshot_driver = browser
     browser.maximize_window()
-
     yield browser
 
-    # Cerrar el navegador al finalizar la prueba.
+    logger.info("Cerrando navegador | prueba: %s", request.node.nodeid)
     browser.quit()

@@ -18,6 +18,7 @@ class LoginPage(BasePage):
 
     # Abrir la página de SauceDemo.
     def open(self):
+        self.logger.info("Abriendo SauceDemo")
         self.driver.get(BASE_URL)
 
     # Iniciar sesión con las credenciales recibidas.
